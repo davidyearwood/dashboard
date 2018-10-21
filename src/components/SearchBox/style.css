@@ -1,0 +1,19 @@
+.yodlr-searchbox {
+    border: 1px solid #ccc;
+    border-bottom-right-radius: 3px;
+    border-top-right-radius: 3px;
+}
+
+
+.yodlr-searchbox__field {
+    border: none;
+}
+
+.yodlr-searchbox__field:focus {
+    border: 1px solid #346cb0; 
+}
+
+.yodlr-searchbox__icon {
+    padding: .8rem;
+}
+

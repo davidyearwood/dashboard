@@ -17,6 +17,7 @@
 .yodlr-tab__item:hover {
     color: #333333; 
     border-bottom: 2px solid #e9eaeb; 
+    text-decoration: none;
 }
 
 .yodlr-tab__item--active {
