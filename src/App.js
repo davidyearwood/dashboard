@@ -10,11 +10,14 @@ import './main.css';
 class App extends React.Component {
     constructor(props) {
         super(props);
+
         this.state = {
             error: null,
             isLoaded: false,
-            users: []
+            users: [], 
+            searchValue: '', 
         }
+        this.handleChange = this.handleChange.bind(this);
     }
 
     // Load users
@@ -26,6 +29,7 @@ class App extends React.Component {
                     users: result,
                     isLoaded: true
                 });
+                this.filterUsers = this.state.users; 
             }, (error) => {
                 this.setState({
                     isLoaded: true,
@@ -34,22 +38,31 @@ class App extends React.Component {
             })
     }
 
+    handleChange(event) {
+        this.setState({
+            searchValue: event.target.value
+        });
+    }
+
+    searchUser() {
+        const { users, searchValue } = this.state; 
+
+        if (!searchValue) {
+            return users; 
+        }
+
+        return users.filter((user) => {
+            return user.firstName.includes(searchValue) || 
+                   user.lastName.includes(searchValue) || 
+                   user.email.includes(searchValue);
+        });
+
+        return users; 
+    }
+
     render() {
         const tabs = [{text: "All"}, {text: "Active"}, {text: "Pending"}];
         const { users, isLoaded, error } = this.state; 
-
-        // create table rows
-        const userRows = users.map((user) => {
-            return(
-                <tr>
-                    <td>{user.id}</td>
-                    <td>{user.email}</td>
-                    <td>{user.firstName}</td>
-                    <td>{user.lastName}</td>
-                    <td>{user.state}</td>
-                </tr>
-            );
-        });
 
         return(
             <div>
@@ -60,8 +73,8 @@ class App extends React.Component {
                             <Tabs tabItems={tabs} />
                         </header>
                         <div className="card-body">
-                            <SearchBox value="" />
-                            <UserTable users={users} />
+                            <SearchBox value={this.state.searchValue} onChange={this.handleChange} />
+                            <UserTable users={this.searchUser()} />
                         </div>
                     </div>
                 </div>
