@@ -3,7 +3,7 @@ import TabItem from './TabItem';
 
 function Tabs(props) {
    const tabItems = props.tabItems.map((item) => {
-    return <TabItem text={item.text} onClick={item.onClick} filterType={props.filterType} />; 
+    return <TabItem text={item.text} onClick={item.onClick} filterType={item.filterType} />; 
    });
 
    return (

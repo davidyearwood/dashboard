@@ -4,9 +4,11 @@
 }
 
 .yodlr-tab__item {
+    border: none;
     background-color: transparent; 
     border-bottom: 2px solid transparent;
     color: #686f76; 
+    cursor: pointer;
     font-family: 'Roboto', Helvetica, Arial, sans-serif; 
     font-size: 0.875em;
     padding: 1rem; 

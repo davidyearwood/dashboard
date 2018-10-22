@@ -48,7 +48,6 @@ class App extends React.Component {
 
     handleTabClick(event) {
         event.preventDefault(); 
-        
         this.setState({
             filterValue: event.target.value
         });
