@@ -4,7 +4,7 @@ import './style.css';
 
 function TabItem(props) {
     return (
-        <a href="#" onClick={props.onClick} className="yodlr-tab__item">{props.text}</a>
+        <a href="#" value={props.filterType} onClick={props.onClick} className="yodlr-tab__item">{props.text}</a>
     ); 
 }
 

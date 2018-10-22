@@ -16,8 +16,10 @@ class App extends React.Component {
             isLoaded: false,
             users: [], 
             searchValue: '', 
+            filterValue: 'all'
         }
         this.handleChange = this.handleChange.bind(this);
+        this.handleTabClick = this.handleTabClick.bind(this);
     }
 
     // Load users
@@ -44,25 +46,62 @@ class App extends React.Component {
         });
     }
 
-    searchUser() {
-        const { users, searchValue } = this.state; 
+    handleTabClick(event) {
+        event.preventDefault(); 
+        
+        this.setState({
+            filterValue: event.target.value
+        });
+    }
 
-        if (!searchValue) {
+    searchUser(users, value) {
+        if (!value) {
             return users; 
         }
 
         return users.filter((user) => {
-            return user.firstName.includes(searchValue) || 
-                   user.lastName.includes(searchValue) || 
-                   user.email.includes(searchValue);
+            return user.firstName.includes(value) || 
+                   user.lastName.includes(value) || 
+                   user.email.includes(value);
         });
+    }
 
-        return users; 
+    filterByStatus(users, status) {
+        if (status === "all") {
+            return users; 
+        }
+
+        return users.filter((user) => user.state === status); 
     }
 
     render() {
-        const tabs = [{text: "All"}, {text: "Active"}, {text: "Pending"}];
-        const { users, isLoaded, error } = this.state; 
+        const tabs = [
+            { 
+                text: "All", 
+                onClick: this.handleTabClick, 
+                filterType: "all"
+            }, 
+            {
+                text: "Active", 
+                onClick: this.handleTabClick,
+                filterType: "active"
+            }, 
+            {
+                text: "Pending",
+                onClick: this.handleTabClick, 
+                filterType: "pending"
+            }
+        ];
+        
+        let { users, isLoaded, error, filterValue, searchValue } = this.state; 
+
+        if (filterValue === "all" || filterValue === "pending" || filterValue === "active") {
+            users = this.filterByStatus(users, filterValue); 
+        }
+
+        if (searchValue) {
+            users = this.searchUser(users, searchValue); 
+        }
 
         return(
             <div>
@@ -74,7 +113,7 @@ class App extends React.Component {
                         </header>
                         <div className="card-body">
                             <SearchBox value={this.state.searchValue} onChange={this.handleChange} />
-                            <UserTable users={this.searchUser()} />
+                            <UserTable users={users} />
                         </div>
                     </div>
                 </div>
