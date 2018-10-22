@@ -4,7 +4,7 @@ import './style.css';
 
 function SearchBox(props) {
     return (
-        <div className="input-group">
+        <div className="input-group mb-4">
             <div className="input-group-prepend">
                 <div className="input-group-text">
                     <i class="fas fa-search"></i>
@@ -12,7 +12,7 @@ function SearchBox(props) {
             </div>
             <input 
                 type="text" 
-                className="form-control"
+                className="form-control yodlr-searchbox__field"
                 value={props.value} 
                 placeholder="Search users" 
                 onChange={props.onChange} 
