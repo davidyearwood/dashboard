@@ -3,6 +3,7 @@ import isEmail from 'validator/lib/isEmail';
 import isEmpty from 'validator/lib/isEmpty';
 import isAlpha from 'validator/lib/isAlpha';
 import UserForm from './UserForm'; 
+import Flash from '../Message/Flash'; 
 
 import '../../stylesheet/card.css'; 
 
@@ -28,8 +29,15 @@ export default class CreateUser extends React.Component {
                 hasError: true, 
                 msg: null,
                 classNames: 'form-control'
-            }
+            },
+            form: {
+                isSubmitted: false,
+                hasError: false,
+                statusCode: '',
+            },
+            displayFlash: false, 
         }; 
+
         this.handleEmailChange = this.handleEmailChange.bind(this); 
         this.handleFirstNameChange = this.handleFirstNameChange.bind(this);
         this.handleLastNameChange = this.handleLastNameChange.bind(this);
@@ -162,6 +170,7 @@ export default class CreateUser extends React.Component {
         let data = { }; 
 
         e.preventDefault(); 
+
         if(this.state.email.hasError === false && this.state.firstName.hasError === false && this.state.lastName.hasError === false) {
             data.email = this.state.email.value; 
             data.firstName = this.state.firstName.value; 
@@ -178,47 +187,90 @@ export default class CreateUser extends React.Component {
                 referrer: "no-referrer",
                 redirect: "manual", 
                 body: JSON.stringify(data)
-            }).then(response => { 
-                if (response.ok) {
-                    // set some state that displays
-                    // feedback to true 
-                } else {
-                    // do the opposite that was mentioned above
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw Error(response.statusText);
                 }
+                return response; 
+            })
+            .then(response => { 
+                if (response.ok) {
+                    this.setState({
+                        form: {
+                            isSubmitted: true, 
+                            statusCode: response.statusText, 
+                            hasError: !response.ok
+                        }, 
+                        displayFlash: true
+                    });
+                    console.log("data submitted");
+                } 
+            }).catch(error => {
+                this.setState({
+                    form: {
+                        isSubmitted: true, 
+                        statusCode: response.statusText, 
+                        hasError: !response.ok
+                    }, 
+                    displayFlash: true
+                });
+
+                console.log(error);
             }); 
         }
     }
 
     render() {
-        return (
-            <UserForm 
-                hasEmailFeedback={true}
-                emailClassName={this.state.email.classNames}
-                emailValue={this.state.email.value}
-                onEmailChange={this.handleEmailChange}
-                onEmailBlur={this.handleEmailBlur}
-                isEmailInvalid={this.state.email.hasError}
-                emailMsg={this.state.email.msg}
+        let flashMsg = this.state.form.hasError ? 
+                        (
+                            <React.Fragment>
+                                <h2 className="text-center text-danger">OOPS - {this.state.form.statusCode}</h2>
+                                <p>Wasn't able to register your account. Refresh your browser and try again.</p>
+                            </React.Fragment>
+                        ) : (
+                            <React.Fragment>
+                                <h2 className="text-center text-success">SUCCESS!</h2>
+                                <p>{this.state.firstName.value}, thank you for your submission!</p>
+                            </React.Fragment>
+                        ); 
 
-                hasFirstNameFeedback={true}
-                firstNameClassName={this.state.firstName.classNames}
-                firstNameValue={this.state.firstName.value}
-                onFirstNameChange={this.handleFirstNameChange}
-                onFirstNameBlur={this.handleFirstNameBlur}
-                firstNameMsg={this.state.firstName.msg}
-                isFirstNameInvalid={this.state.firstName.hasError}
+        <Flash hasError={this.state.form.hasError}> 
+            {flashMsg}
+        </Flash>
 
-                hasLastNameFeedback={true}
-                lastNameClassName={this.state.lastName.classNames}
-                lastNameValue={this.state.lastName.value}
-                onLastNameChange={this.handleLastNameChange}
-                onLastNameBlur={this.handleLastNameBlur}
-                isLastNameInvalid={this.state.lastName.hasError}
-                lastNameMsg={this.state.lastName.msg}
+        let renderForm = this.state.displayFlash ? (<Flash hasError={this.state.form.hasError}> {flashMsg}</Flash>) :
+                         (
+                            <UserForm 
+                            hasEmailFeedback={true}
+                            emailClassName={this.state.email.classNames}
+                            emailValue={this.state.email.value}
+                            onEmailChange={this.handleEmailChange}
+                            onEmailBlur={this.handleEmailBlur}
+                            isEmailInvalid={this.state.email.hasError}
+                            emailMsg={this.state.email.msg}
 
-                buttonText={"Register user"}
-                onUserFormSubmit={this.handleUserFormSubmit}
-            />
-        ); 
+                            hasFirstNameFeedback={true}
+                            firstNameClassName={this.state.firstName.classNames}
+                            firstNameValue={this.state.firstName.value}
+                            onFirstNameChange={this.handleFirstNameChange}
+                            onFirstNameBlur={this.handleFirstNameBlur}
+                            firstNameMsg={this.state.firstName.msg}
+                            isFirstNameInvalid={this.state.firstName.hasError}
+
+                            hasLastNameFeedback={true}
+                            lastNameClassName={this.state.lastName.classNames}
+                            lastNameValue={this.state.lastName.value}
+                            onLastNameChange={this.handleLastNameChange}
+                            onLastNameBlur={this.handleLastNameBlur}
+                            isLastNameInvalid={this.state.lastName.hasError}
+                            lastNameMsg={this.state.lastName.msg}
+
+                            buttonText={"Register user"}
+                            onUserFormSubmit={this.handleUserFormSubmit}
+                            />
+                         );
+        
+        return (renderForm); 
     }
 }
