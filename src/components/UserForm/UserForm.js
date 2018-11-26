@@ -3,7 +3,7 @@ import Feedback from '../Feedback/Feedback';
 
 function UserForm(props) {
     return (
-        <form method="POST" action="/users" noValidate> 
+        <form noValidate onSubmit={props.onUserFormSubmit}> 
             <div className="form-group mb-3">
                 <label for="email" className="form-field__label">Email</label>
                 <input 
@@ -14,7 +14,8 @@ function UserForm(props) {
                     placeholder="e.g., bob@gmail.com" 
                     value={props.emailValue} 
                     onChange={props.onEmailChange} 
-                    onBlur={props.onEmailBlur} 
+                    onBlur={props.onEmailBlur}
+                    required 
                 /> 
                 { props.hasEmailFeedback ? <Feedback isInvalid={props.isEmailInvalid} msg={props.emailMsg} /> : null }
             </div>
@@ -30,8 +31,9 @@ function UserForm(props) {
                     value={ props.firstNameValue} 
                     onChange={props.onFirstNameChange}
                     onBlur={props.onFirstNameBlur}
+                    required
                 /> 
-                {props.hasFirstNameFeedback ? <Feedback isInvalid={props.isFirstNameInvald} msg={props.firstNameMessage} /> : null}
+                {props.hasFirstNameFeedback ? <Feedback isInvalid={props.isFirstNameInvalid} msg={props.firstNameMsg} /> : null}
             </div>
 
             <div className="form-group mb-3"> 
@@ -45,14 +47,14 @@ function UserForm(props) {
                     value={props.lastNameValue} 
                     onChange={props.onLastNameChange}
                     onBlur={props.onLastNameBlur}
+                    required
                 />
-                { props.hasLastNameFeedback ? <Feedback isInvalid={props.isLastNameInvald} msg={props.LastNameMessage} /> : null }
+                { props.hasLastNameFeedback ? <Feedback isInvalid={props.isLastNameInvalid} msg={props.lastNameMsg} /> : null }
             </div>
 
             <button 
                 type="submit" 
                 class="btn btn-primary btn-block mt-5 mb-3 btn-lg"
-                onSubmit={props.onUserFormSubmit}
             >
                 {props.buttonText}
             </button>
