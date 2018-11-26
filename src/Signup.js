@@ -1,4 +1,5 @@
 import React from 'react';
+import Feedback from './components/Feedback/Feedback';
 import isEmail from 'validator/lib/isEmail';
 import './stylesheet/card.css'; 
 
@@ -23,12 +24,14 @@ export default class Signup extends React.Component {
             email: {
                 value: '', 
                 hasError: false, 
-                errorMessage: null
+                errorMessage: null,
+                classNames: 'form-control'
             }
         } 
         this.handleEmailChange = this.handleEmailChange.bind(this); 
         this.handleFirstNameChange = this.handleFirstNameChange.bind(this);
         this.handleLastNameChange = this.handleLastNameChange.bind(this);
+        this.handleEmailBlur = this.handleEmailBlur.bind(this);
     }
 
     handleFirstNameChange(e) {
@@ -56,12 +59,47 @@ export default class Signup extends React.Component {
             email: {
                 value: e.target.value, 
                 hasError: false, 
-                errorMessage: null
+                errorMessage: null,
+                classNames: 'form-control'
             }
         });
     }
 
+    // validating email: 
+    // 1. When a user types in an invalid email:
+    // 1a. Create an invalid feedback message
+    // 1b. Update the email input field's className to include is-invalid
+    // Conversly: 
+    // Create a valid feedback message 
+    // Update the email input field's className to include is-valid 
+    // The className is-invalid and is-valid are only displayed when the user has commited a blur action
+    handleEmailBlur(e) {
+        if (isEmail(e.target.value)) {
+            this.setState({
+                email: {
+                    value: e.target.value, 
+                    hasError: false, 
+                    errorMessage: 'Looks good!', 
+                    classNames: 'form-control is-valid'
+                }
+            });
+        } else {
+            this.setState({
+                email: {
+                    value: e.target.value, 
+                    hasError: true, 
+                    errorMessage: 'Please enter a valid email',
+                    classNames: 'form-control is-invalid'
+                }
+            });
+        }
+    }
+
     render() {
+        let emailFeedback = (
+            <Feedback isInvalid={this.state.email.hasError} msg={this.state.email.errorMessage}/>
+        ); 
+
         return (
         <div className="container">
             <header className="header-signup text-center">
@@ -70,10 +108,20 @@ export default class Signup extends React.Component {
             <div class="card mx-auto card-yodlr col-md-5">
                 <div className="card-body">
                     <h1 className="card-title h4 mt-3 mb-4 font-weight-normal">User Registration</h1>
-                    <form method="POST" action="/users"> 
+                    <form method="POST" action="/users" noValidate> 
                         <div className="form-group mb-3">
                             <label for="email" className="form-field__label">Email</label>
-                            <input type="email" name="email" className="form-control" id="email" placeholder="e.g., bob@gmail.com"value={ this.state.email.value} onChange={this.handleEmailChange}/> 
+                            <input 
+                                type="email" 
+                                name="email" 
+                                className={this.state.email.classNames} 
+                                id="email" 
+                                placeholder="e.g., bob@gmail.com" 
+                                value={ this.state.email.value} 
+                                onChange={this.handleEmailChange} 
+                                onBlur={this.handleEmailBlur} 
+                            /> 
+                            {emailFeedback}
                         </div>
 
                         <div className="form-group mb-3">
@@ -86,7 +134,11 @@ export default class Signup extends React.Component {
                             <input type="text" name="lastName" className="form-control" id="last-name" placeholder="e.g., Smith"value={ this.state.lastName.value} onChange={this.handleLastNameChange}/>
                         </div>
 
-                        <button type="submit" class="btn btn-primary btn-block mt-5 mb-3 btn-lg">Register user</button>
+                        <button 
+                            type="submit" 
+                            class="btn btn-primary btn-block mt-5 mb-3 btn-lg"
+                            onD
+                        > Register user</button>
                     </form> 
                 </div>
             </div>
