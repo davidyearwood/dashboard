@@ -107,10 +107,12 @@ class App extends React.Component {
                 <Nav />
                 <div className="container">
                     <div className="card">
-                        <header className="card-header">
-                            <Tabs tabItems={tabs} />
+                        <header className="card-header pb-3 pt-4">
+                            <h1 className="h2 float-left">Users</h1>
+                            <button className="btn btn-primary float-right"><i class="fas fa-plus mr-1"></i> Add a new User</button>
                         </header>
                         <div className="card-body">
+                            <Tabs tabItems={tabs} />
                             <SearchBox value={this.state.searchValue} onChange={this.handleChange} />
                             <UserTable users={users} />
                         </div>

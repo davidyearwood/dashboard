@@ -14,6 +14,7 @@ function UserTable(props) {
     }); 
 
     return (
+        <div className="table-responsive">
         <table className="table table-striped">
             <thead>
                 <tr>
@@ -28,6 +29,7 @@ function UserTable(props) {
                 {userRows}
             </tbody>
         </table>
+        </div>
     ); 
 } 
 
