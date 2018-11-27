@@ -4,6 +4,7 @@ import isEmpty from 'validator/lib/isEmpty';
 import isAlpha from 'validator/lib/isAlpha';
 import UserForm from './UserForm'; 
 import Flash from '../Message/Flash'; 
+import handleFailedHttpResponse from '../../utils/handleFailedHttpResponse'; 
 
 import '../../stylesheet/card.css'; 
 
@@ -167,15 +168,16 @@ export default class CreateUser extends React.Component {
     }
 
     handleUserFormSubmit(e) {
-        let data = { }; 
+        let data = { 
+            email: this.state.email.value, 
+            firstName: this.state.firstName.value, 
+            lastName: this.state.lastName.value
+        }; 
 
         e.preventDefault(); 
 
-        if(this.state.email.hasError === false && this.state.firstName.hasError === false && this.state.lastName.hasError === false) {
-            data.email = this.state.email.value; 
-            data.firstName = this.state.firstName.value; 
-            data.lastName = this.state.lastName.value; 
-
+        if(this.state.email.hasError === false && 
+            this.state.firstName.hasError === false && this.state.lastName.hasError === false) {
             fetch("/users", {
                 method: "POST",
                 mode: "cors",
@@ -188,12 +190,7 @@ export default class CreateUser extends React.Component {
                 redirect: "manual", 
                 body: JSON.stringify(data)
             })
-            .then(response => {
-                if (!response.ok) {
-                    throw Error(response.statusText);
-                }
-                return response; 
-            })
+            .then(handleFailedHttpResponse)
             .then(response => { 
                 if (response.ok) {
                     this.setState({
