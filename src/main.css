@@ -6,7 +6,8 @@ th {
     font-size: .8rem;
 }
 
-.table thead td, .table thead th {
+.table thead td,
+.table thead th {
     border-top-width: 0;
     border-bottom-width: 1px;
 }
@@ -25,10 +26,27 @@ th {
 .custom-nav {
     border-bottom: 1px solid #cccccc;
 }
+
 .white {
-    color: #ffffff !important; 
+    color: #ffffff !important;
 }
 
 .bg-deep-blue {
     background-color: #2d4d79;
+}
+
+.show {
+    display: block !important;
+}
+
+.backdrop {
+    display: none;
+    position: fixed;
+    background: rgba(0, 0, 0, .5);
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 10;
+    height: 100%;
 }
