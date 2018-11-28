@@ -96,6 +96,25 @@ class App extends React.Component {
         return users.filter((user) => user.state === status); 
     }
 
+    renderUserForm() {
+
+        if (this.state.displayModal) {
+            return (
+                    <Modal 
+                    title="Add a new User" 
+                    onDismissBtnClick={this.handleDismissBtnClick} 
+                    onBackdropClick={this.handleBackdropClick}
+                    
+
+                > 
+                    <CreateUserForm />
+                </Modal> 
+            );
+        }
+
+        return null; 
+    }
+
     render() {
         const tabs = [
             { 
@@ -129,15 +148,7 @@ class App extends React.Component {
             <div>
                 <Nav />
                 <div className="container">
-                    <Modal 
-                        title="Add a new User" 
-                        onDismissBtnClick={this.handleDismissBtnClick} 
-                        onBackdropClick={this.handleBackdropClick}
-                        modalStyles={ this.state.displayModal ? "show" : ""}
-
-                    > 
-                        <CreateUserForm />
-                    </Modal>
+                    {this.renderUserForm()}
                     <div className="card">
                         <header className="card-header pb-3 pt-4">
                             <h1 className="h2 float-left">Users</h1>

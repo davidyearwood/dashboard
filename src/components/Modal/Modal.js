@@ -1,12 +1,11 @@
 import React from 'react'; 
 
 function Modal(props) {
-    
     return (
         <React.Fragment>
-            <div className={"backdrop " + props.modalStyles } onClick={props.onBackdropClick}>
+            <div className={"backdrop show"} onClick={props.onBackdropClick}>
             </div>
-            <div className={"modal " + props.modalStyles } tabindex="-1" role="dialog">
+            <div className={"modal show"} tabindex="-1" role="dialog">
                 <div className="modal-dialog" role="document">
                     <div className="modal-content">
                         <div className="modal-header">
