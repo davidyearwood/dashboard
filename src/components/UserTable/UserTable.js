@@ -9,6 +9,7 @@ function UserTable(props) {
                 <td>{user.firstName}</td>
                 <td>{user.lastName}</td>
                 <td>{user.state}</td>
+                <td><button onClick={(e) => { props.onClick(e, user.id) }} className="btn btn-success">{props.buttonText}</button></td>
             </tr>
         );
     }); 

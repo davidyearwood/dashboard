@@ -63,6 +63,7 @@ class App extends React.Component {
         this.handleEmailChange = this.handleEmailChange.bind(this); 
         this.handleFirstNameChange = this.handleFirstNameChange.bind(this);
         this.handleLastNameChange = this.handleLastNameChange.bind(this);
+        this.handleUserAccountClick = this.handleUserAccountClick.bind(this);
     }
 
     // Load users
@@ -385,6 +386,52 @@ class App extends React.Component {
         return null; 
     }
 
+    handleUserAccountClick(e, id) {
+        let users = this.state.users; 
+        
+        let user = users.filter((user) => id === user.id)[0]; 
+
+        if (user.state === "pending") {
+            user.state = "active";
+            // send post request
+            fetch(`/users/${user.id}`, {
+                method: "PUT",
+                mode: "cors",
+                cahce: "no-cache", 
+                credentials: "same-origin", 
+                headers: {
+                    "Content-Type": "application/json; charset=utf-8"
+                }, 
+                referrer: "no-referrer",
+                redirect: "manual", 
+                body: JSON.stringify(user)
+            })
+            .then(handleFailedHttpResponse)
+            .then(response => { 
+                if (response.ok) {
+                    this.setState({
+                        form: {
+                            isSubmitted: true, 
+                            statusCode: response.statusText, 
+                            hasError: !response.ok
+                        }, 
+                        isDataSubmitValid: true
+                    });
+                    console.log("data submitted");
+                } 
+            }).catch(error => {
+                this.setState({
+                    form: {
+                        isSubmitted: true, 
+                        statusCode: response.statusText, 
+                        hasError: !response.ok
+                    }, 
+                    isDataSubmitValid: false
+                });
+            });     
+        } 
+    }
+
     render() {
         const tabs = [
             { 
@@ -427,7 +474,7 @@ class App extends React.Component {
                         <div className="card-body">
                             <Tabs tabItems={tabs} />
                             <SearchBox value={this.state.searchValue} onChange={this.handleChange} />
-                            <UserTable users={users} />
+                            <UserTable users={users} buttonText={"Activate Account"} onClick={this.handleUserAccountClick} />
                         </div>
                     </div>
                 </div>
