@@ -2,7 +2,7 @@ import React from 'react';
 import isEmail from 'validator/lib/isEmail';
 import isEmpty from 'validator/lib/isEmpty';
 import isAlpha from 'validator/lib/isAlpha';
-import UserForm from './UserForm'; 
+import UserForm from './UserFormView'; 
 import Flash from '../Message/Flash'; 
 import handleFailedHttpResponse from '../../utils/handleFailedHttpResponse'; 
 
